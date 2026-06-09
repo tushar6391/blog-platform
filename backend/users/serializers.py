@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import Profile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -17,3 +18,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
         )
         return user
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    email = serializers.ReadOnlyField(source='user.email')
+
+    class Meta:
+        model = Profile
+        fields = ['id', 'username', 'email', 'bio', 'location', 'avatar_url', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'username', 'email', 'created_at', 'updated_at']
